@@ -1,1 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Community Event Portal</title>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <a href="#home">Home</a> |
+    <a href="#events">Events</a> |
+    <a href="#contact">Contact</a> |
+    <a href="help.html" target="_blank">Help</a>
+  </nav>
 
+  <!-- Main -->
+  <main>
+    <section id="home">
+      <div id="welcomeBanner" style="background-color: blue; color: white; padding: 10px;">
+        Welcome <span style="color:red; font-weight:bold;">Special Offer!</span>
+      </div>
+    </section>
+
+    <section id="events">
+      <h2 class="highlight">Community Events</h2>
+      <table>
+        <caption>Previous Events</caption>
+        <tr>
+          <td><img src="event1.jpg" alt="Music Fest" title="Music Fest" class="highlight" style="border: 2px solid #000;"></td>
+          <td><img src="event2.jpg" alt="Food Fair" title="Food Fair" class="highlight" style="border: 2px solid #000;"></td>
+          <td><img src="event3.jpg" alt="Marathon" title="Marathon" class="highlight" style="border: 2px solid #000;"></td>
+        </tr>
+        <tr>
+          <td><img src="event4.jpg" alt="Art Show" title="Art Show" class="highlight" style="border: 2px solid #000;"></td>
+          <td><img src="event5.jpg" alt="Job Fair" title="Job Fair" class="highlight" style="border: 2px solid #000;"></td>
+          <td><img src="event6.jpg" alt="Book Launch" title="Book Launch" class="highlight" style="border: 2px solid #000;"></td>
+        </tr>
+      </table>
+
+      <!-- Event Registration Form -->
+      <form onsubmit="return showOutput()">
+        <label>Name: <input type="text" name="name" placeholder="Your Name" required autofocus></label><br>
+        <label>Email: <input type="email" name="email" placeholder="Email Address" required></label><br>
+        <label>Date: <input type="date" name="date" required></label><br>
+        <label>Event Type:
+          <select name="eventType" onchange="storePreference(this)">
+            <option value="music">Music</option>
+            <option value="tech">Tech</option>
+            <option value="sports">Sports</option>
+          </select>
+        </label><br>
+        <label>Message:<br>
+          <textarea name="message" onkeydown="countChars(this)"></textarea>
+        </label><br>
+        <label>Phone: <input type="text" id="phone" onblur="validatePhone()"></label><br>
+        <button type="submit" onclick="confirmSubmission()">Register</button>
+        <output id="confirmation"></output>
+      </form>
+      <button onclick="clearPreferences()">Clear Preferences</button>
+    </section>
+
+    <!-- Video Section -->
+    <section>
+      <video width="320" height="240" controls oncanplay="videoReady()">
+        <source src="promo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </section>
+
+    <!-- Geolocation -->
+    <section>
+      <button onclick="findNearbyEvents()">Find Nearby Events</button>
+      <p id="locationResult"></p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 City Council Events</p>
+  </footer>
+
+  <script>
+    window.onbeforeunload = function() {
+      return "Are you sure you want to leave without submitting the form?";
+    }
+
+    function validatePhone() {
+      const phone = document.getElementById('phone');
+      if (!/^\d{10}$/.test(phone.value)) {
+        alert("Enter a valid 10-digit phone number");
+      }
+    }
+
+    function confirmSubmission() {
+      document.getElementById("confirmation").textContent = "Registration submitted!";
+    }
+
+    function videoReady() {
+      alert("Video ready to play");
+    }
+
+    function storePreference(select) {
+      localStorage.setItem("eventType", select.value);
+    }
+
+    function clearPreferences() {
+      localStorage.clear();
+      sessionStorage.clear();
+      alert("Preferences cleared");
+    }
+
+    function showOutput() {
+      document.getElementById("confirmation").textContent = "Thank you for registering!";
+      return false;
+    }
+
+    function countChars(textarea) {
+      console.log("Characters typed:", textarea.value.length);
+    }
+
+    function findNearbyEvents() {
+      const result = document.getElementById("locationResult");
+      if (!navigator.geolocation) {
+        result.textContent = "Geolocation not supported.";
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          result.textContent = `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
+        },
+        (err) => {
+          result.textContent = `Error: ${err.message}`;
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+        }
+      );
+    }
+
+    // Pre-fill form from localStorage
+    window.onload = function () {
+      const eventType = localStorage.getItem("eventType");
+      if (eventType) {
+        document.querySelector("select[name='eventType']").value = eventType;
+      }
+    };
+  </script>
+</body>
+</html>
