@@ -1,1 +1,153 @@
+<!-- In index.html -->
+<script src="main.js" defer></script>
+// main.js
+console.log("Welcome to the Community Portal");
+window.onload = () => alert("Page is fully loaded!");
+const eventName = "Music Festival";
+const eventDate = "2025-07-01";
+let availableSeats = 100;
 
+console.log(`${eventName} is scheduled for ${eventDate}`);
+availableSeats--;
+console.log(`Seats remaining: ${availableSeats}`);
+const events = [
+  { name: "Art Expo", date: "2025-06-01", seats: 10 },
+  { name: "Old Event", date: "2024-01-01", seats: 5 },
+  { name: "Sold Out", date: "2025-07-01", seats: 0 },
+];
+
+const today = new Date("2025-05-27");
+events.forEach(event => {
+  const isUpcoming = new Date(event.date) > today;
+  const hasSeats = event.seats > 0;
+
+  if (isUpcoming && hasSeats) {
+    console.log(`${event.name} is available.`);
+  } else {
+    console.log(`${event.name} is not available.`);
+  }
+});
+
+try {
+  throw new Error("Simulated registration error.");
+} catch (e) {
+  console.error("Error during registration:", e.message);
+}
+function addEvent(event) {
+  events.push(event);
+}
+
+function registerUser(name, eventName) {
+  console.log(`${name} registered for ${eventName}`);
+}
+
+function filterEventsByCategory(category, callback) {
+  const filtered = events.filter(ev => ev.category === category);
+  callback(filtered);
+}
+
+// Closure
+function categoryCounter(category) {
+  let count = 0;
+  return function () {
+    count++;
+    console.log(`${category} registered count: ${count}`);
+  };
+}
+const musicCounter = categoryCounter("Music");
+musicCounter(); musicCounter();
+function Event(name, seats) {
+  this.name = name;
+  this.seats = seats;
+}
+Event.prototype.checkAvailability = function () {
+  return this.seats > 0 ? "Available" : "Full";
+};
+
+const yoga = new Event("Yoga Class", 20);
+console.log(Object.entries(yoga));
+const allEvents = ["Music", "Tech", "Art"];
+
+allEvents.push("Food Fair");
+const musicEvents = allEvents.filter(e => e === "Music");
+const displayNames = allEvents.map(e => `Event: ${e}`);
+
+console.log(displayNames);
+const container = document.querySelector("#eventsList");
+events.forEach(event => {
+  const card = document.createElement("div");
+  card.textContent = `${event.name} - ${event.date}`;
+  container.appendChild(card);
+});
+document.querySelector("#registerBtn").onclick = () => alert("Registered!");
+
+document.querySelector("#eventType").onchange = (e) => {
+  console.log("Category selected:", e.target.value);
+};
+
+document.querySelector("#searchInput").onkeydown = (e) => {
+  if (e.key === "Enter") {
+    console.log("Searching for:", e.target.value);
+  }
+};
+[
+  { "name": "Music Night", "date": "2025-09-01" }
+]
+// With Promises
+fetch("events.json")
+  .then(res => res.json())
+  .then(data => console.log("Fetched events:", data))
+  .catch(err => console.error("Fetch error:", err));
+
+// With async/await
+async function fetchEvents() {
+  try {
+    const res = await fetch("events.json");
+    const data = await res.json();
+    console.log("Events:", data);
+  } catch (e) {
+    console.error(e);
+  }
+}
+fetchEvents();
+const [firstEvent] = events;
+const { name, date } = firstEvent;
+
+const newList = [...events];
+console.log(newList);
+
+function greet(name = "Guest") {
+  console.log(`Hello, ${name}`);
+}
+document.querySelector("form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const form = e.target;
+  const name = form.elements.name.value;
+  const email = form.elements.email.value;
+
+  if (!name || !email) {
+    alert("All fields required!");
+  } else {
+    console.log(`User: ${name}, Email: ${email}`);
+  }
+});
+const user = { name: "John", event: "Tech Expo" };
+
+fetch("https://jsonplaceholder.typicode.com/posts", {
+  method: "POST",
+  body: JSON.stringify(user),
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+  .then(res => res.json())
+  .then(data => {
+    console.log("Response:", data);
+    setTimeout(() => alert("Submitted after delay!"), 2000);
+  });
+console.log("Form submission started");
+debugger; // use Chrome Dev Tools to pause and inspect
+// jQuery example (preview for next module)
+$("#registerBtn").click(() => {
+  $("#eventsList").fadeOut().fadeIn();
+});
